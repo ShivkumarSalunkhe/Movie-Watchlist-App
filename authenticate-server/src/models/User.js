@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
 
+const movieSchema = new mongoose.Schema({
+  Title: { type: String, required: true },
+  Year: String,
+  imdbID: { type: String},
+  Type: String,
+  Poster: String,
+});
+
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  watchList: [movieSchema], // Embedded watch list schema
 });
 
 module.exports = mongoose.model('User', userSchema);
