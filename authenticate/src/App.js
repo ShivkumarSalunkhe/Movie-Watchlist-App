@@ -7,7 +7,7 @@ import WatchList from './components/WatchList';
 import Signup from './components/SignUp';
 import MovieDetails from './components/MovieDetails';
 import './App.css';
-import LogIn from './components/Login';
+import Login from './components/Login';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
           <h1>Movie Watchlist App</h1>
         </header> */}
         {/* <Signup /> */}
-        {/* <LogIn/> */}
+        {/* <Login/> */}
         <MovieSearch />
         {/* <WatchList /> */}
         {/* <MovieDetails movie={{ Title: 'Movie Title', Year: 'Year', Plot: 'Plot Summary', Poster: 'Poster URL' }} /> */}

@@ -1,77 +1,158 @@
 // MovieSearch.js
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addMovieToWatchlist, setMovies } from "../store/reducers/movieSlice";
+import { setMovieWatchlist, setMovies } from "../store/reducers/movieSlice";
 import { searchMovies } from "../services/movieService";
 import { experimentalStyled as styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-
+import MovieDetailsCard from "./MovieDetails";
+import WatchList from "./WatchList";
+import { InputAdornment, TextField, Typography } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import {
+  addMovieToWatchlist,
+  getMovieToWatchlist,
+} from "../services/watchListService";
 export default function MovieSearch() {
   const [searchTerm, setSearchTerm] = useState("");
   const movies = useSelector((state) => state.movies.movies);
+  const watchlist = useSelector((state) => state.movies.watchlist);
+  const [showWatchList, setShowWatchList] = useState(true);
   const dispatch = useDispatch();
-  console.log(movies);
-  const handleSearch = async () => {
+  const token = localStorage.getItem("token"); // Get token from localStorage
+  const email = localStorage.getItem("email"); // Get token from localStorage
+  useEffect(() => {
+    const handleSearch = async () => {
+      try {
+        // const data = await searchMovies(searchTerm); // Call searchMovies function
+        // dispatch(setMovies(data)); // Dispatch setMovies action with fetched data
+      } catch (error) {
+        console.error("Error searching movies:", error);
+        // Handle error, show message to user, etc.
+      }
+    };
+    handleSearch();
+  }, [searchTerm]);
+  const handleAddToWatchlist = async (movie) => {
     try {
-      const data = await searchMovies(searchTerm); // Call searchMovies function
-      dispatch(setMovies(data)); // Dispatch setMovies action with fetched data
+      await addMovieToWatchlist(email, movie, token);
     } catch (error) {
-      console.error("Error searching movies:", error);
-      // Handle error, show message to user, etc.
+      console.error("Error adding movies:", error);
     }
   };
-useEffect(()=>{
-  handleSearch()
-},[])
-  const handleAddToWatchlist = (movie) => {
-    dispatch(addMovieToWatchlist(movie));
-  };
-
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-    ...theme.typography.body2,
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    height:'100vh'
-  }));
-
+  // useEffect(() => {
+  //   getMovieToWatchlist(email, token, dispatch);
+  // }, [email, token]);
+  console.log(showWatchList);
+  // const handleOpenWatchList = () => {
+  //   setShowWatchList(true); // Use setShowWatchList to update the state
+  // };
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={0}>
-        <input
-            type="text"
-            placeholder="Search movies"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          <button onClick={handleSearch}>Search</button>
-       <Grid item xs={4}>
-          <Item>xs=4</Item>
-        </Grid>
-        <Grid item xs={8}>
-          <Item>xs=8</Item>
-        </Grid>
+    <Grid container>
+      <Grid xs={3} style={{position:"relative" , borderRight:"2px solid #7b676742"}}>
+        <WatchList setShowWatchList={setShowWatchList} />
       </Grid>
-    </Box>
+      <Grid
+        container
+        xs={9}
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <Box height="40vh" style={{ display: 'content', width: '-webkit-fill-available' }}>
+          {showWatchList ? (
+            // <Box
+            //   p={4}
+            //   ml={7}
+            //   mr={7}
+            //   mb={4}
+            //   mt={4}
+            // >
+            //   <Typography variant="h6" component="div">
+            //     Movies By Tom Cruise
+            //   </Typography>
+            //   <Typography>About this watch list</Typography>
+            // </Box>
+            <Box
+              p={2}
+              ml={7}
+              mr={7}
+              mb={4}
+              mt={4}
+              style={{ textAlign: 'justify' }}
+            >
+              <Typography variant="h5" component="div" style={{fontSize: "2rem", fontFamily: "sans-serif", paddingBottom: "1.5rem" }}>
+                Movies By Tom Cruise
+              </Typography>
+              <Typography style={{lineHeight: 2, fontWeight: "600", fontSize: "1.4rem"}}>
+                About this watch list
+              </Typography>
+              <Typography>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae, libero.
+              </Typography>
+            </Box>
+          ) : (
+            <Box
+              border="1.5px solid #b57474"
+              borderRadius={1}
+              p={2}
+              ml={7}
+              mr={7}
+              mb={4}
+              mt={4}
+              style={{ textAlign: 'justify' }}
+            >
+              <Typography variant="h5" component="div" style={{fontSize: "2rem", fontFamily: "sans-serif", paddingBottom: "1.5rem" }}>
+                Welcome to <span style={{color: "#ff0000ba"}}>Watchlists</span>
+              </Typography>
+              <Typography style={{lineHeight: 2}}>
+                Browse movies, add them to watchlists, and share them with
+                friends.
+                <br />
+                Simply click the <span>+</span> icon to add a movie, the poster to view
+                more details, and the checkmark to mark the movie as watched.
+              </Typography>
+            </Box>
+          )}
+          {!showWatchList && (
+            <Box p={1} ml={6} mr={6} mb={3}>
+              <TextField
+                mb={2}
+                fullWidth
+                id="outlined-controlled"
+                placeholder="Search"
+                // label="Controlled"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+          )}
+        </Box>
+          {/* <div> */}
+        {
+        movies.map((movie, index) => (
+          <Box height="auto" style={{margin:"1.2rem"}}>
+          <MovieDetailsCard
+          key={movie.imdbID} // Add key prop for each card
+          index={index}
+          movie={movie}
+          handleAddToWatchlist={handleAddToWatchlist} // Pass handleAddToWatchlist function
+          />
+          </Box>
+          ))}
+        {movies.length === 0 && <Box style={{textAlign: "center", justifyContent: "center", fontSize: "2rem", fontFamily: "fantasy", color: "#955757", height: "50vh", position: "relative", top:"20%"}}>Movies Not Found</Box>}
+          {/* </div> */}
+      </Grid>
+    </Grid>
   );
 }
-
-
-
-{/* <Box sx={{ flexGrow: 1 }}>
-<Grid
-  container
-  spacing={{ xs: 2, md: 3 }}
-  columns={{ xs: 4, sm: 8, md: 12 }}
->
-  {movies.map((movie, index) => (
-    <Grid item xs={2} sm={4} md={4} key={index}>
-      {/* <Item>xs=2</Item> */}
-      // {movie.Title}
-    // </Grid>
-  // ))}
-// </Grid>
-// </Box> */}

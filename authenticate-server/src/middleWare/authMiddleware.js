@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = "shiv";
 
-const authMiddleware = (req, res, next) => {
+const AuthMiddleware = (req, res, next) => {
   console.log('USER',req.user);
   const authHeader = req.header("Authorization");
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -17,4 +17,4 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+module.exports = AuthMiddleware;
