@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/AuthRoutes');
-const AuthMiddleware = require('./middleWare/authMiddleware');
-const watchlistRoutes = require('./routes/watchListRoutes');
+const AuthMiddleware = require('./middleWare/authMiddleware.js');
+const WatchlistRoutes = require('./routes/watchlistRoutes.js');
 
 require('dotenv').config();
 
@@ -16,7 +16,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/api/auth', authRoutes);
-app.use('/api/watchlist', AuthMiddleware, watchlistRoutes);
+app.use('/api/watchlist', AuthMiddleware, WatchlistRoutes);
 
 mongoose.connect("mongodb+srv://shivkumarsalunkhe50:r9zjY1cXLpGkAygl@cluster0.xvug0as.mongodb.net/movie-watch-list", {
   useNewUrlParser: true,
