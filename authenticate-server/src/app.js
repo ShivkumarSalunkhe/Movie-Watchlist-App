@@ -9,15 +9,15 @@ const watchlistRoutes = require('./routes/watchListRoutes');
 require('dotenv').config();
 
 const app = express();
-const { DB_URL } = process.env;
+const DB_URL  = process.env.DB_URL;
 
-
+console.log("DB_URL", DB_URL);
 app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/watchlist', authMiddleware, watchlistRoutes);
-// Connect to MongoDB using Mongoose
+
 mongoose.connect("mongodb+srv://shivkumarsalunkhe50:r9zjY1cXLpGkAygl@cluster0.xvug0as.mongodb.net/movie-watch-list", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
