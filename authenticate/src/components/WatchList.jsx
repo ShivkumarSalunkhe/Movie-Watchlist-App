@@ -33,8 +33,8 @@ function WatchList({ handleOpenWatchList, showWatchList }) {
   return (
     <>
       <Box margin={3} className="watchListSidebar">
-        <Button onClick={handleOpenWatchList} variant="outlined" fullWidth>
-          {showWatchList ? "Open Home" : "Open My Watchlist"}
+        <Button onClick={handleOpenWatchList} variant="contained" size="large" color="success" fullWidth>
+          {showWatchList ? "Go To Home Page" : "Open My Watchlist"}
         </Button>
 
         <Typography
@@ -82,7 +82,7 @@ function WatchList({ handleOpenWatchList, showWatchList }) {
         >
           <HomeIcon sx={{ fontSize: 25, color: "white" }} />
           <Typography variant="body1" sx={{ marginLeft: 1, color: "#fff" }}>
-            {showWatchList ? "My Watchlist" : "My Home"}
+            {showWatchList ? "My Watchlist" : "Home"}
           </Typography>
         </Box>
 

@@ -140,7 +140,7 @@ const navigate = useNavigate()
             fontWeight: "600",
           }}
         >
-          Enter Your Information
+          {account === "login" ? "Login" : "SignUp"}
         </Typography>
 
         {account === "login" ? (

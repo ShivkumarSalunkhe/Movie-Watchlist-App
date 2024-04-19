@@ -32,7 +32,7 @@ export const addMovieToWatchlist = async (email, movie, token) => {
 export const getMovieToWatchlist = async (email, token, dispatch) => {
     try {
         const response = await axios.get(
-            `${URL}/api/watchlist?email=${email}`, // Send email as a query parameter
+            `${URL}/watchlist?email=${email}`, // Send email as a query parameter
             {
               headers: {
                 "Content-Type": "application/json",
