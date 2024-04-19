@@ -9,6 +9,8 @@ const movieSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
+  firstName: {type: String},
+  lastName: {type: String},
   email: { type: String, required: true, unique: true },
   watchList: [movieSchema], // Embedded watch list schema
 });

@@ -8,25 +8,24 @@ const WatchlistRoutes = require('./routes/watchlistRoutes.js');
 
 require('dotenv').config();
 
-const app = express();
-const DB_URL  = process.env.DB_URL;
+const { DB_URL, PORT } = process.env;
 
-console.log("DB_URL", DB_URL);
+const app = express();
+
 app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/watchlist', AuthMiddleware, WatchlistRoutes);
 
-mongoose.connect("mongodb+srv://shivkumarsalunkhe50:r9zjY1cXLpGkAygl@cluster0.xvug0as.mongodb.net/movie-watch-list", {
+mongoose.connect(DB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
-  console.log('MongoDB connected');
 }).catch(err => {
   console.error('Error connecting to MongoDB: ', err.message);
 });
 
-const PORT = process.env.PORT || 5000;
+const APP_PORT = PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(APP_PORT, () => console.log(`Server running on port ${APP_PORT}`));

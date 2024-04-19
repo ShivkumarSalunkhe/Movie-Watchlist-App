@@ -5,7 +5,7 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 export const addMovieToWatchlist = async (email, movie, token) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/watchlist/add",
+      "https://movie-watchlist-app.onrender.com/api/watchlist/add",
       {
         email,
         movie,
@@ -32,7 +32,7 @@ export const addMovieToWatchlist = async (email, movie, token) => {
 export const getMovieToWatchlist = async (email, token, dispatch) => {
     try {
         const response = await axios.get(
-            `http://localhost:5000/api/watchlist?email=${email}`, // Send email as a query parameter
+            `https://movie-watchlist-app.onrender.com/api/watchlist?email=${email}`, // Send email as a query parameter
             {
               headers: {
                 "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export const getMovieToWatchlist = async (email, token, dispatch) => {
               },
             }
           );
-          dispatch(setMovieWatchlist(response));
+          dispatch(setMovieWatchlist(response?.data));
     } catch (error) {
       throw new Error(
         error.response.data.error || "Failed to fetch movie watchlist"

@@ -19,15 +19,16 @@ export default function MovieSearch() {
   const [searchTerm, setSearchTerm] = useState("");
   const movies = useSelector((state) => state.movies.movies);
   const watchlist = useSelector((state) => state.movies.watchlist);
-  const [showWatchList, setShowWatchList] = useState(true);
+  const [showWatchList, setShowWatchList] = useState(false);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token"); // Get token from localStorage
   const email = localStorage.getItem("email"); // Get token from localStorage
+
   useEffect(() => {
     const handleSearch = async () => {
       try {
-        // const data = await searchMovies(searchTerm); // Call searchMovies function
-        // dispatch(setMovies(data)); // Dispatch setMovies action with fetched data
+        const data = await searchMovies(searchTerm); // Call searchMovies function
+        dispatch(setMovies(data)); // Dispatch setMovies action with fetched data
       } catch (error) {
         console.error("Error searching movies:", error);
         // Handle error, show message to user, etc.
@@ -37,22 +38,28 @@ export default function MovieSearch() {
   }, [searchTerm]);
   const handleAddToWatchlist = async (movie) => {
     try {
-      await addMovieToWatchlist(email, movie, token);
+      const res = await addMovieToWatchlist(email, movie, token);
     } catch (error) {
       console.error("Error adding movies:", error);
     }
   };
-  // useEffect(() => {
-  //   getMovieToWatchlist(email, token, dispatch);
-  // }, [email, token]);
-  console.log(showWatchList);
-  // const handleOpenWatchList = () => {
-  //   setShowWatchList(true); // Use setShowWatchList to update the state
-  // };
+  useEffect(() => {
+    getMovieToWatchlist(email, token, dispatch);
+  }, [email, token, dispatch, showWatchList]);
+
+  const handleOpenWatchList = () => {
+    setShowWatchList(!showWatchList); // Use setShowWatchList to update the state
+  };
   return (
     <Grid container>
-      <Grid xs={3} style={{position:"relative" , borderRight:"2px solid #7b676742"}}>
-        <WatchList setShowWatchList={setShowWatchList} />
+      <Grid
+        xs={3}
+        style={{ position: "relative", borderRight: "2px solid #7b676742" }}
+      >
+        <WatchList
+          showWatchList={showWatchList}
+          handleOpenWatchList={handleOpenWatchList}
+        />
       </Grid>
       <Grid
         container
@@ -62,36 +69,38 @@ export default function MovieSearch() {
         alignItems="center"
         height="100vh"
       >
-        <Box height="40vh" style={{ display: 'content', width: '-webkit-fill-available' }}>
+        <Box
+          height="40vh"
+          style={{ display: "content", width: "-webkit-fill-available" }}
+        >
           {showWatchList ? (
-            // <Box
-            //   p={4}
-            //   ml={7}
-            //   mr={7}
-            //   mb={4}
-            //   mt={4}
-            // >
-            //   <Typography variant="h6" component="div">
-            //     Movies By Tom Cruise
-            //   </Typography>
-            //   <Typography>About this watch list</Typography>
-            // </Box>
             <Box
               p={2}
               ml={7}
               mr={7}
               mb={4}
               mt={4}
-              style={{ textAlign: 'justify' }}
+              style={{ textAlign: "justify" }}
             >
-              <Typography variant="h5" component="div" style={{fontSize: "2rem", fontFamily: "sans-serif", paddingBottom: "1.5rem" }}>
+              <Typography
+                variant="h5"
+                component="div"
+                style={{
+                  fontSize: "2rem",
+                  fontFamily: "sans-serif",
+                  paddingBottom: "1.5rem",
+                }}
+              >
                 Movies By Tom Cruise
               </Typography>
-              <Typography style={{lineHeight: 2, fontWeight: "600", fontSize: "1.4rem"}}>
+              <Typography
+                style={{ lineHeight: 2, fontWeight: "600", fontSize: "1.4rem" }}
+              >
                 About this watch list
               </Typography>
               <Typography>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae, libero.
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae,
+                libero.
               </Typography>
             </Box>
           ) : (
@@ -103,17 +112,27 @@ export default function MovieSearch() {
               mr={7}
               mb={4}
               mt={4}
-              style={{ textAlign: 'justify' }}
+              style={{ textAlign: "justify" }}
             >
-              <Typography variant="h5" component="div" style={{fontSize: "2rem", fontFamily: "sans-serif", paddingBottom: "1.5rem" }}>
-                Welcome to <span style={{color: "#ff0000ba"}}>Watchlists</span>
+              <Typography
+                variant="h5"
+                component="div"
+                style={{
+                  fontSize: "2rem",
+                  fontFamily: "sans-serif",
+                  paddingBottom: "1.5rem",
+                }}
+              >
+                Welcome to{" "}
+                <span style={{ color: "#ff0000ba" }}>Watchlists</span>
               </Typography>
-              <Typography style={{lineHeight: 2}}>
+              <Typography style={{ lineHeight: 2 }}>
                 Browse movies, add them to watchlists, and share them with
                 friends.
                 <br />
-                Simply click the <span>+</span> icon to add a movie, the poster to view
-                more details, and the checkmark to mark the movie as watched.
+                Simply click the <span>+</span> icon to add a movie, the poster
+                to view more details, and the checkmark to mark the movie as
+                watched.
               </Typography>
             </Box>
           )}
@@ -138,20 +157,64 @@ export default function MovieSearch() {
             </Box>
           )}
         </Box>
-          {/* <div> */}
-        {
-        movies.map((movie, index) => (
-          <Box height="auto" style={{margin:"1.2rem"}}>
-          <MovieDetailsCard
-          key={movie.imdbID} // Add key prop for each card
-          index={index}
-          movie={movie}
-          handleAddToWatchlist={handleAddToWatchlist} // Pass handleAddToWatchlist function
-          />
+        {/* <div> */}
+        {showWatchList
+          ? watchlist?.map((movie, index) => (
+              <Box height="auto" style={{ margin: "1.2rem" }}>
+                <MovieDetailsCard
+                  key={movie.imdbID} // Add key prop for each card
+                  index={index}
+                  movie={movie}
+                  handleAddToWatchlist={handleAddToWatchlist} // Pass handleAddToWatchlist function
+                  showWatchList={showWatchList}
+                />
+              </Box>
+            ))
+          : movies.map((movie, index) => (
+              <Box height="auto" style={{ margin: "1.2rem" }}>
+                <MovieDetailsCard
+                  key={movie.imdbID} // Add key prop for each card
+                  index={index}
+                  movie={movie}
+                  handleAddToWatchlist={handleAddToWatchlist} // Pass handleAddToWatchlist function
+                  showWatchList={showWatchList}
+                />
+              </Box>
+            ))}
+
+        {!showWatchList && movies.length === 0 && (
+          <Box
+            style={{
+              textAlign: "center",
+              justifyContent: "center",
+              fontSize: "2rem",
+              fontFamily: "fantasy",
+              color: "#955757",
+              height: "50vh",
+              position: "relative",
+              top: "20%",
+            }}
+          >
+            Movies Not Found
           </Box>
-          ))}
-        {movies.length === 0 && <Box style={{textAlign: "center", justifyContent: "center", fontSize: "2rem", fontFamily: "fantasy", color: "#955757", height: "50vh", position: "relative", top:"20%"}}>Movies Not Found</Box>}
-          {/* </div> */}
+        )}
+          {showWatchList && watchlist?.length === 0 && (
+          <Box
+            style={{
+              textAlign: "center",
+              justifyContent: "center",
+              fontSize: "2rem",
+              fontFamily: "fantasy",
+              color: "#955757",
+              height: "50vh",
+              position: "relative",
+              top: "20%",
+            }}
+          >
+            Watch List Not Found
+          </Box>
+        )}
+        {/* </div> */}
       </Grid>
     </Grid>
   );
