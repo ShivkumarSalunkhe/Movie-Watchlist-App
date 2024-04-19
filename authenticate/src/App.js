@@ -26,7 +26,9 @@ const PrivateRoute = ({ isAuthenticated, ...props }) => {
 };
 
 function App() {
-  const [isAuthenticated, isUserAuthenticated] = useState(localStorage.getItem("token"));
+  const [isAuthenticated, isUserAuthenticated] = useState(
+    localStorage.getItem("token")
+  );
   return (
     <BrowserRouter>
       <Provider store={store}>
@@ -43,11 +45,6 @@ function App() {
             >
               <Route path="/moviesearch" element={<MovieSearch />} />
             </Route>
-            {/* <Signup /> */}
-            {/* <Login/> */}
-            {/* <MovieSearch /> */}
-            {/* <WatchList /> */}
-            {/* <MovieDetails movie={{ Title: 'Movie Title', Year: 'Year', Plot: 'Plot Summary', Poster: 'Poster URL' }} /> */}
           </Routes>
         </div>
       </Provider>

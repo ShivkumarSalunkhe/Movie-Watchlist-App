@@ -1,11 +1,11 @@
 import axios from "axios";
 import { setMovieWatchlist } from "../store/reducers/movieSlice";
-const API_KEY = process.env.REACT_APP_API_KEY;
+const URL = process.env.REACT_APP_URL;
 
 export const addMovieToWatchlist = async (email, movie, token) => {
   try {
     const response = await axios.post(
-      "https://movie-watchlist-app.onrender.com/api/watchlist/add",
+      `${URL}/watchlist/add`,
       {
         email,
         movie,
@@ -32,7 +32,7 @@ export const addMovieToWatchlist = async (email, movie, token) => {
 export const getMovieToWatchlist = async (email, token, dispatch) => {
     try {
         const response = await axios.get(
-            `https://movie-watchlist-app.onrender.com/api/watchlist?email=${email}`, // Send email as a query parameter
+            `${URL}/api/watchlist?email=${email}`, // Send email as a query parameter
             {
               headers: {
                 "Content-Type": "application/json",

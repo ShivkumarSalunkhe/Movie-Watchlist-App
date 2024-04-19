@@ -1,4 +1,3 @@
-// MovieSearch.js
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setMovieWatchlist, setMovies } from "../store/reducers/movieSlice";
@@ -21,17 +20,16 @@ export default function MovieSearch() {
   const watchlist = useSelector((state) => state.movies.watchlist);
   const [showWatchList, setShowWatchList] = useState(false);
   const dispatch = useDispatch();
-  const token = localStorage.getItem("token"); // Get token from localStorage
-  const email = localStorage.getItem("email"); // Get token from localStorage
+  const token = localStorage.getItem("token"); 
+  const email = localStorage.getItem("email"); 
 
   useEffect(() => {
     const handleSearch = async () => {
       try {
-        const data = await searchMovies(searchTerm); // Call searchMovies function
-        dispatch(setMovies(data)); // Dispatch setMovies action with fetched data
+        const data = await searchMovies(searchTerm); 
+        dispatch(setMovies(data));
       } catch (error) {
         console.error("Error searching movies:", error);
-        // Handle error, show message to user, etc.
       }
     };
     handleSearch();
@@ -48,7 +46,7 @@ export default function MovieSearch() {
   }, [email, token, dispatch, showWatchList]);
 
   const handleOpenWatchList = () => {
-    setShowWatchList(!showWatchList); // Use setShowWatchList to update the state
+    setShowWatchList(!showWatchList);
   };
   return (
     <Grid container>
@@ -143,7 +141,6 @@ export default function MovieSearch() {
                 fullWidth
                 id="outlined-controlled"
                 placeholder="Search"
-                // label="Controlled"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 InputProps={{
@@ -157,15 +154,14 @@ export default function MovieSearch() {
             </Box>
           )}
         </Box>
-        {/* <div> */}
         {showWatchList
           ? watchlist?.map((movie, index) => (
               <Box height="auto" style={{ margin: "1.2rem" }}>
                 <MovieDetailsCard
-                  key={movie.imdbID} // Add key prop for each card
+                  key={movie.imdbID} 
                   index={index}
                   movie={movie}
-                  handleAddToWatchlist={handleAddToWatchlist} // Pass handleAddToWatchlist function
+                  handleAddToWatchlist={handleAddToWatchlist} 
                   showWatchList={showWatchList}
                 />
               </Box>
@@ -173,10 +169,10 @@ export default function MovieSearch() {
           : movies.map((movie, index) => (
               <Box height="auto" style={{ margin: "1.2rem" }}>
                 <MovieDetailsCard
-                  key={movie.imdbID} // Add key prop for each card
+                  key={movie.imdbID} 
                   index={index}
                   movie={movie}
-                  handleAddToWatchlist={handleAddToWatchlist} // Pass handleAddToWatchlist function
+                  handleAddToWatchlist={handleAddToWatchlist} 
                   showWatchList={showWatchList}
                 />
               </Box>
@@ -195,7 +191,7 @@ export default function MovieSearch() {
               top: "20%",
             }}
           >
-            Movies Not Found
+            Search Your Favorite Movies
           </Box>
         )}
           {showWatchList && watchlist?.length === 0 && (
@@ -211,10 +207,9 @@ export default function MovieSearch() {
               top: "20%",
             }}
           >
-            Watch List Not Found
+            Make WatchList Of Your Favorite Movies
           </Box>
         )}
-        {/* </div> */}
       </Grid>
     </Grid>
   );
