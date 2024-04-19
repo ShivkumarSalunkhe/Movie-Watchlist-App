@@ -14,7 +14,6 @@ export const userLogin = async (email) => {
 };
 
 export const userSignup = async (payload) => {
-  console.log(payload);
   try {
     const response = await axios.post(`${URL}/auth/register`, { ...payload });
     if (!response.data || !response.data.token) {

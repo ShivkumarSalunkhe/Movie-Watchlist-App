@@ -23,13 +23,11 @@ import ControlBar from "./AppBar";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-function WatchList({ handleOpenWatchList, showWatchList }) {
+function WatchList({ handleOpenWatchList, showWatchList, handleRemoveFromWatchlist }) {
   const watchlist = useSelector((state) => state.movies.watchlist);
-  const dispatch = useDispatch();
 
-  const handleRemoveFromWatchlist = (movie) => {
-    dispatch(removeMovieFromWatchlist(movie));
-  };
+
+ 
   return (
     <>
       <Box margin={3} className="watchListSidebar">
@@ -101,7 +99,6 @@ function WatchList({ handleOpenWatchList, showWatchList }) {
         >
           My Lists
         </Typography>
-        {showWatchList && (
           <>
             <Box mb={14}>
               <List>
@@ -109,15 +106,13 @@ function WatchList({ handleOpenWatchList, showWatchList }) {
                   <ListItem
                     key={movie._id}
                     secondaryAction={
-                      <IconButton edge="end" aria-label="delete">
+                      <IconButton edge="end" aria-label="delete" onClick={()=>handleRemoveFromWatchlist(movie._id)}>
                         <DeleteIcon />
                       </IconButton>
                     }
                   >
                     <ListItemAvatar>
-                      <Avatar>
-                        <FolderIcon />
-                      </Avatar>
+                    <Avatar alt={movie.Title} src={movie.Poster}/>
                     </ListItemAvatar>
                     <ListItemText primary={movie.Title} />
                   </ListItem>
@@ -125,7 +120,6 @@ function WatchList({ handleOpenWatchList, showWatchList }) {
               </List>
             </Box>
           </>
-        )}
       </Box>
       <ControlBar />
     </>

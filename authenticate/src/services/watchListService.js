@@ -47,3 +47,30 @@ export const getMovieToWatchlist = async (email, token, dispatch) => {
       );
     }
   };
+
+  export const deleteMovieFromWatchlist = async (email, movieId, token) => {
+    try {
+      const response = await axios.delete(
+        `${URL}/watchlist/delete`,
+        {
+          data: {
+            email,
+            movieId,
+          },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // Add your JWT token here
+          },
+        }
+      );
+      if (!response.data) {
+        throw new Error('Failed to delete movie from watchlist');
+      }
+      return response.data; // Return the response directly
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.error || 'Failed to delete movie from watchlist'
+      );
+    }
+  };
+  

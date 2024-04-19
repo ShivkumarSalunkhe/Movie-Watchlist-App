@@ -31,4 +31,27 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.delete('/delete', async (req, res) => {
+  const { email, movieId } = req.body;
+  try {
+    const user = await User.findOneAndUpdate(
+      { email },
+      { $pull: { watchList: { _id: movieId } } },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    if (!user.watchList || user.watchList.length === 0) {
+      return res.status(404).json({ error: 'Watch list is empty' });
+    }
+    res.json({watchList:user.watchList,
+    message:"Watch List Item Deleted Successfully."});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete movie from watch list' });
+  }
+});
+
+
 module.exports = router;

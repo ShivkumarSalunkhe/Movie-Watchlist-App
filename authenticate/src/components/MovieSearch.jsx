@@ -12,6 +12,7 @@ import { InputAdornment, TextField, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   addMovieToWatchlist,
+  deleteMovieFromWatchlist,
   getMovieToWatchlist,
 } from "../services/watchListService";
 export default function MovieSearch() {
@@ -34,13 +35,27 @@ export default function MovieSearch() {
     };
     handleSearch();
   }, [searchTerm]);
+
+
   const handleAddToWatchlist = async (movie) => {
     try {
-      const res = await addMovieToWatchlist(email, movie, token);
+      await addMovieToWatchlist(email, movie, token);
+      await getMovieToWatchlist(email, token, dispatch);
     } catch (error) {
       console.error("Error adding movies:", error);
     }
   };
+
+  const handleRemoveFromWatchlist = async (movieId) => {
+    try {
+      await deleteMovieFromWatchlist(email, movieId, token);
+      await getMovieToWatchlist(email, token, dispatch);
+    } catch (error) {
+      console.error("Error adding movies:", error);
+    }
+  };
+
+  
   useEffect(() => {
     getMovieToWatchlist(email, token, dispatch);
   }, [email, token, dispatch, showWatchList]);
@@ -48,6 +63,9 @@ export default function MovieSearch() {
   const handleOpenWatchList = () => {
     setShowWatchList(!showWatchList);
   };
+
+  
+
   return (
     <Grid container>
       <Grid
@@ -57,6 +75,7 @@ export default function MovieSearch() {
         <WatchList
           showWatchList={showWatchList}
           handleOpenWatchList={handleOpenWatchList}
+          handleRemoveFromWatchlist={handleRemoveFromWatchlist}
         />
       </Grid>
       <Grid
@@ -207,7 +226,7 @@ export default function MovieSearch() {
               top: "20%",
             }}
           >
-            Make WatchList Of Your Favorite Movies
+            Go To Home Page & Make WatchList Of Your Favorite Movies
           </Box>
         )}
       </Grid>

@@ -65,7 +65,6 @@ export default function MovieDetailsCard({
             }}
             variant="outlined"
             type="submit"
-            onClick={() => handleAddToWatchlist(movie)}
           >
             <div
               className="blu"
