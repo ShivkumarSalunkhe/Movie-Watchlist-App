@@ -8,7 +8,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import MovieDetailsCard from "./MovieDetails";
 import WatchList from "./WatchList";
-import { InputAdornment, TextField, Typography } from "@mui/material";
+import { CircularProgress, InputAdornment, TextField, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   addMovieToWatchlist,
@@ -18,6 +18,8 @@ import {
 import ToastContext from "./ToastContext";
 export default function MovieSearch() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [loader, setLoader] = useState(false);
+
   const movies = useSelector((state) => state.movies.movies);
   const watchlist = useSelector((state) => state.movies.watchlist);
   const [showWatchList, setShowWatchList] = useState(false);
@@ -28,10 +30,13 @@ export default function MovieSearch() {
 
   useEffect(() => {
     const handleSearch = async () => {
+      setLoader(true)
       try {
         const data = await searchMovies(searchTerm); 
-        dispatch(setMovies(data));
+        await dispatch(setMovies(data));
+        setLoader(false)
       } catch (error) {
+        setLoader(false)
         console.error("Error searching movies:", error);
       }
     };
@@ -72,6 +77,7 @@ export default function MovieSearch() {
 
   return (
     <Grid container>
+      
       <Grid
         xs={3}
         style={{ position: "relative", borderRight: "2px solid #7b676742" }}
@@ -82,6 +88,7 @@ export default function MovieSearch() {
           handleRemoveFromWatchlist={handleRemoveFromWatchlist}
         />
       </Grid>
+     
       <Grid
         container
         xs={9}
@@ -214,9 +221,10 @@ export default function MovieSearch() {
               top: "20%",
             }}
           >
-            Search Your Favorite Movies
+            {loader ? <CircularProgress /> : "Search Your Favorite Movies"}
           </Box>
         )}
+     
           {showWatchList && watchlist?.length === 0 && (
           <Box
             style={{
