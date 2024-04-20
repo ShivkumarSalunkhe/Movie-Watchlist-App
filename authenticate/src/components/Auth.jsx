@@ -166,7 +166,6 @@ function Auth({ isUserAuthenticated }) {
               placeholder="Last Name"
               variant="standard"
               name="lastName"
-              required
               value={userPayload.lastName || ""}
               onChange={handleChange}
             />
