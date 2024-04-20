@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setMovieWatchlist, setMovies } from "../store/reducers/movieSlice";
 import { searchMovies } from "../services/movieService";
@@ -15,6 +15,7 @@ import {
   deleteMovieFromWatchlist,
   getMovieToWatchlist,
 } from "../services/watchListService";
+import ToastContext from "./ToastContext";
 export default function MovieSearch() {
   const [searchTerm, setSearchTerm] = useState("");
   const movies = useSelector((state) => state.movies.movies);
@@ -23,6 +24,7 @@ export default function MovieSearch() {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token"); 
   const email = localStorage.getItem("email"); 
+  const { toast } = useContext(ToastContext);
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -39,7 +41,8 @@ export default function MovieSearch() {
 
   const handleAddToWatchlist = async (movie) => {
     try {
-      await addMovieToWatchlist(email, movie, token);
+       await addMovieToWatchlist(email, movie, token);
+       await toast.success("Movie added to your watchlist!");
       await getMovieToWatchlist(email, token, dispatch);
     } catch (error) {
       console.error("Error adding movies:", error);
@@ -49,6 +52,7 @@ export default function MovieSearch() {
   const handleRemoveFromWatchlist = async (movieId) => {
     try {
       await deleteMovieFromWatchlist(email, movieId, token);
+      await toast.success("Movie removed from your watchlist!");
       await getMovieToWatchlist(email, token, dispatch);
     } catch (error) {
       console.error("Error adding movies:", error);

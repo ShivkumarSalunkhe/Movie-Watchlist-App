@@ -8,7 +8,7 @@ const AuthController = {
       const { email, firstName, lastName } = req.body;
       const user = new User({ email, firstName, lastName });
       await user.save();
-      res.status(201).json({ message: "User created successfully", user });
+      res.status(200).json({ message: "User created successfully", user });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -26,9 +26,9 @@ const AuthController = {
         expiresIn: "1h",
       });
       // Send the token back in the response
-      res.json({ message: "Login successful", user: user.email, token });
+      res.json({ message: "Login successful", user: user, token });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: "User not found" });
     }
   },
 };

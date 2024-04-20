@@ -1,11 +1,8 @@
-// App.js
 import React, { useState } from "react";
 import { Provider } from "react-redux";
 import store from "../src/store/store";
 import MovieSearch from "./components/MovieSearch";
-import WatchList from "./components/WatchList";
-import Signup from "./components/SignUp";
-import MovieDetails from "./components/MovieDetails";
+import Auth from "./components/Auth";
 import "./App.css";
 import {
   BrowserRouter,
@@ -14,6 +11,7 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
+import { ToastContextProvider } from "./components/ToastContext";
 
 const PrivateRoute = ({ isAuthenticated, ...props }) => {
   return isAuthenticated ? (
@@ -30,13 +28,14 @@ function App() {
     localStorage.getItem("token")
   );
   return (
+    <ToastContextProvider>
     <BrowserRouter>
       <Provider store={store}>
         <div className="App">
           <Routes>
             <Route
               path="/"
-              element={<Signup isUserAuthenticated={isUserAuthenticated} />}
+              element={<Auth isUserAuthenticated={isUserAuthenticated} />}
             />
 
             <Route
@@ -49,6 +48,7 @@ function App() {
         </div>
       </Provider>
     </BrowserRouter>
+    </ToastContextProvider>
   );
 }
 
