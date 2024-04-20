@@ -83,7 +83,7 @@ export default function ControlBar() {
             component="div"
             sx={{ color: "black", ml: 2 }}
           >
-            {name}
+            {name ? name : "Authenticate User"}
           </Typography>
           <IconButton
             size="large"
