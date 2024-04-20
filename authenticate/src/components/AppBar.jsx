@@ -9,7 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useNavigate } from "react-router-dom";
 import ToastContext from "./ToastContext";
-import { Avatar } from "@mui/material";
+import { Avatar, Hidden } from "@mui/material";
 
 export default function ControlBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -83,7 +83,7 @@ export default function ControlBar() {
             component="div"
             sx={{ color: "black", ml: 2 }}
           >
-            {name ? name : "Authenticate User"}
+            {name === 'undefined' ? "User" : name}
           </Typography>
           <IconButton
             size="large"
