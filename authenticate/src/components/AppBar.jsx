@@ -83,7 +83,7 @@ export default function ControlBar() {
             component="div"
             sx={{ color: "black", ml: 2 }}
           >
-            {name === 'undefined' ? "User" : name}
+            {name === undefined ? "User" : name}
           </Typography>
           <IconButton
             size="large"
